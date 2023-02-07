@@ -1,0 +1,48 @@
+--- QUERY 1
+with hotels as (
+	select * from dbo.['2015$']
+	union
+	select * from dbo.['2016$']
+	union
+	select * from dbo.['2017$']
+	union
+	select * from dbo.['2018$']
+	union
+	select * from dbo.['2019$']
+	union
+	select * from dbo.['2020$']
+)
+
+
+-- Q1. is our revenue growing?
+-- add stays_in_week_nights and stays_in_weekend_nights and multiply by adr (daily rate) columns
+
+
+select 
+arrival_date_year,
+hotel,
+round(sum((stays_in_week_nights + stays_in_weekend_nights)*adr), 2) as revenue
+from hotels
+group by arrival_date_year, hotel
+
+----- QUERY 2
+-- Joined all tables 
+with hotels as (
+	select * from dbo.['2015$']
+	union
+	select * from dbo.['2016$']
+	union
+	select * from dbo.['2017$']
+	union
+	select * from dbo.['2018$']
+	union
+	select * from dbo.['2019$']
+	union
+	select * from dbo.['2020$']
+)
+
+select * FROM hotels
+left join dbo.market_segment$
+on hotels.market_segment = market_segment$.market_segment
+left join dbo.meal_cost$
+on meal_cost$.meal = hotels.meal
